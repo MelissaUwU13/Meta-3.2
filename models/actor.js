@@ -19,10 +19,10 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   actor.init({
-   id: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
   },
   name: {
     type: DataTypes.STRING,
@@ -32,7 +32,6 @@ module.exports = (sequelize, DataTypes) => {
   nationality: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
   },
   birthYear: {
     type: DataTypes.INTEGER,
@@ -42,12 +41,10 @@ module.exports = (sequelize, DataTypes) => {
   birthPlace: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
   },
   notableAwards: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
   }
   },{
     sequelize,

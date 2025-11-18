@@ -15,13 +15,18 @@ module.exports = (sequelize, DataTypes) => {
         through:"MovieActors",
         foreignKey:"movieId"
       })
+
+      Movie.belongsTo(models.Director,{
+        as:"Directores",
+        foreignKey:"directorId"
+      })
     }
   }
   movie.init({
    id: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
   },
   title: {
     type: DataTypes.STRING,
@@ -31,37 +36,30 @@ module.exports = (sequelize, DataTypes) => {
   releaseYear: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true
   },
   genre: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
   },
   duration: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true
   },
   directorId: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true
   },
   rating: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true
   },
   language: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
   },
   country: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
   }
   },{
     sequelize,

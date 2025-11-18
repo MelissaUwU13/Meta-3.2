@@ -7,11 +7,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      id: {
-        type: Sequelize.STRING,
-        allowNull:false,
+        type: Sequelize.INTEGER,
         unique: true
       },
       name: {
@@ -22,22 +18,18 @@ module.exports = {
       nationality: {
         type: Sequelize.STRING,
         allowNull:false,
-        unique: true
       },
       birthYear: {
         type: Sequelize.INTEGER,
         allowNull:false,
-        unique: true
       },
       birthPlace: {
         type: Sequelize.STRING,
         allowNull:false,
-        unique: true
       },
       notableAwards: {
         type: Sequelize.STRING,
         allowNull:false,
-        unique: true
       },
       createdAt: {
         allowNull: false,

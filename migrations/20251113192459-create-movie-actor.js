@@ -7,22 +7,28 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      id: {
-        type: Sequelize.STRING,
-        allowNull:false,
+        type: Sequelize.INTEGER,
         unique: true
       },
       movieId: {
-        type: Sequelize.STRING,
-        allowNull:false,
-        unique: true
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Movies',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       actorId: {
-        type: Sequelize.STRING,
-        allowNull:false,
-        unique: true
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Actores',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       characterName: {
         type: Sequelize.STRING,

@@ -4,14 +4,10 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Actores', {
       id: {
-        allowNull: false,
+        type: Sequelize.INTEGER,
+        allowNull:false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      id: {
-        type: Sequelize.STRING,
-        allowNull:false,
         unique: true
       },
       name: {
@@ -22,7 +18,6 @@ module.exports = {
       nationality: {
         type: Sequelize.STRING,
         allowNull:false,
-        unique: true
       },
       birthYear: {
         type: Sequelize.INTEGER,
@@ -32,12 +27,10 @@ module.exports = {
       birthPlace: {
         type: Sequelize.STRING,
         allowNull:false,
-        unique: true
       },
       notableAwards: {
         type: Sequelize.STRING,
         allowNull:false,
-        unique: true
       },
       createdAt: {
         allowNull: false,

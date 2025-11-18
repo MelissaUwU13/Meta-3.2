@@ -14,13 +14,34 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   movieActor.init({
-    id: DataTypes.STRING,
-    movieId: DataTypes.STRING,
-    actorId: DataTypes.STRING,
-    characterName: DataTypes.STRING
-  }, {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  movieId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    unique: true
+  },
+  actorId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    unique: true
+  },
+  characterName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
+  }
+  },{
     sequelize,
-    modelName: 'movieActor',
+    modelName:'movieActor',
+    tableName:'movieActors',
+    name:{
+      singular:'movieActor',
+      plural:'movieActors'
+    }
   });
-  return movieActor;
+
 };

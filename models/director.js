@@ -10,14 +10,17 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Director.hasMany(models.Movie,{
+        as:"Movies",
+        foreignKey:"directorId"
+      })
     }
   }
   director.init({
    id: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
   },
   name: {
     type: DataTypes.STRING,
@@ -27,22 +30,18 @@ module.exports = (sequelize, DataTypes) => {
   nationality: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
   },
   birthYear: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true
   },
   birthPlace: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
   },
   notableAwards: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
   }
   },{
     sequelize,

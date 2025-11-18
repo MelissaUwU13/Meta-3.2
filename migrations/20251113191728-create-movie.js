@@ -7,11 +7,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      id: {
-        type: Sequelize.STRING,
-        allowNull:false,
+        type: Sequelize.INTEGER,
         unique: true
       },
       title: {
@@ -22,37 +18,36 @@ module.exports = {
       releaseYear: {
         type: Sequelize.INTEGER,
         allowNull:false,
-        unique: true
       },
       genre: {
         type: Sequelize.STRING,
         allowNull:false,
-        unique: true
       },
       duration: {
         type: Sequelize.INTEGER,
         allowNull:false,
-        unique: true
       },
       directorId: {
-        type: Sequelize.STRING,
-        allowNull:false,
-        unique: true
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Directores",   // nombre de la tabla real
+          key: "id"
+        },
+        onUpdate: "CASCADE",
+        onDelete: "RESTRICT"
       },
       rating: {
         type: Sequelize.INTEGER,
         allowNull:false,
-        unique: true
       },
       language: {
         type: Sequelize.STRING,
         allowNull:false,
-        unique: true
       },
       country: {
         type: Sequelize.STRING,
         allowNull:false,
-        unique: true
       },
       createdAt: {
         allowNull: false,
