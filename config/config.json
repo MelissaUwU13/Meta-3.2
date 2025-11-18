@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "backenduser",
+    "password": "superpassword",
+    "database": "peliculasAPI",
+    "host": "localhost",
+    "dialect": "mariadb"
+  },
+  "test": {
+    "username": "backenduser",
+    "password": "superpassword",
+    "database": "escolar2test",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "backenduser",
+    "password": "superpassword",
+    "database": "escolar2production",
+    "host": "localhost",
+    "dialect": "mysql"
+  }
+}

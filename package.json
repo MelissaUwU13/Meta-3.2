@@ -1,6 +1,5 @@
 {
   "name": "cinebase-api",
-  "type":"module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -14,5 +13,13 @@
     "express": "^5.1.0",
     "mariadb": "^3.4.5",
     "sequelize": "^6.37.7"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MelissaUwU13/Meta-3.2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MelissaUwU13/Meta-3.2/issues"
+  },
+  "homepage": "https://github.com/MelissaUwU13/Meta-3.2#readme"
 }
