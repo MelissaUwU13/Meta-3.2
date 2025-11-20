@@ -1,5 +1,5 @@
-import express from "express";
-import * as movieController from "../controllers/movies.js";
+const express = require("express");
+const movieController = require("../controllers/movies.js");
 
 const router = express.Router();
 
@@ -9,4 +9,5 @@ router.post("/", movieController.createMovie);
 router.put("/:id", movieController.updateMovie);
 router.delete("/:id", movieController.deleteMovie);
 
-export default router;
+module.exports = router;
+

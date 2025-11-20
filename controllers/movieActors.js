@@ -1,41 +1,79 @@
-import { movieActors } from "../datos/movieActors.js";
-import { movies } from "../datos/movies.js";
-import { actors } from "../datos/actors.js";
+const { Movie, Actor, MovieActor } = require("../models");
 
 // Obtener actores de una película
-export const getActorsByMovie = (req, res, next) => {
-  const movie = movies.find(m => m.id === req.params.movieId);
-  if (!movie)
-    return next({ status: 404, message: "Movie not found", code: 404 });
+const getActorsByMovie = async (req, res, next) => {
+  try {
+    const movieId = parseInt(req.params.movieId, 10);
 
-  const relations = movieActors.filter(ma => ma.movieId === req.params.movieId);
-  const result = relations.map(r => {
-    const actor = actors.find(a => a.id === r.actorId);
-    return { ...actor, characterName: r.characterName };
-  });
+    const found = await Movie.findByPk(movieId);
 
-  res.json(result);
+    if (!found)
+      return next({ status: 404, message: "Movie not found", code: 404 });
+
+    const relations = await MovieActor.findAll({
+      where: { movieId }
+    });
+
+    const actorIds = relations.map(r => r.actorId);
+
+    const actors = await Actor.findAll({
+      where: { id: actorIds }
+    });
+
+    const result = actors.map(a => {
+      const rel = relations.find(r => r.actorId === a.id);
+      return { ...a.dataValues, characterName: rel.characterName };
+    });
+
+    res.json(result);
+
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener actores de la película" });
+  }
 };
 
 // Agregar actor a una película
-export const addActorToMovie = (req, res, next) => {
-  const movie = movies.find(m => m.id === req.params.movieId);
-  if (!movie)
-    return next({ status: 404, message: "Movie not found", code: 404 });
+const addActorToMovie = async (req, res, next) => {
+  try {
+    const movieId = parseInt(req.params.movieId, 10);
 
-  const { actorId, characterName } = req.body;
-  if (!actorId || !characterName)
-    return next({ status: 400, message: "Missing actorId or characterName", code: 400 });
+    const found = await Movie.findByPk(movieId);
 
-  const actor = actors.find(a => a.id === actorId);
-  if (!actor)
-    return next({ status: 422, message: "Actor does not exist", code: 422 });
+    if (!found)
+      return next({ status: 404, message: "Movie not found", code: 404 });
 
-  const exists = movieActors.some(ma => ma.movieId === req.params.movieId && ma.actorId === actorId);
-  if (exists)
-    return next({ status: 409, message: "Actor already in movie", code: 409 });
+    const { actorId, characterName } = req.body;
 
-  const newRelation = { movieId: req.params.movieId, actorId, characterName };
-  movieActors.push(newRelation);
-  res.status(201).json(newRelation);
+    if (!actorId || !characterName)
+      return next({ status: 400, message: "Missing actorId or characterName", code: 400 });
+
+    const parsedActorId = parseInt(actorId, 10);
+
+    const foundActor = await Actor.findByPk(parsedActorId);
+    if (!foundActor)
+      return next({ status: 422, message: "Actor does not exist", code: 422 });
+
+    const exists = await MovieActor.findOne({
+      where: { movieId, actorId: parsedActorId }
+    });
+
+    if (exists)
+      return next({ status: 409, message: "Actor already in movie", code: 409 });
+
+    const newRelation = await MovieActor.create({
+      movieId,
+      actorId: parsedActorId,
+      characterName
+    });
+
+    res.status(201).json(newRelation);
+
+  } catch (error) {
+    res.status(500).json({ error: "Error al agregar actor a la película" });
+  }
+};
+
+module.exports = {
+  getActorsByMovie,
+  addActorToMovie
 };

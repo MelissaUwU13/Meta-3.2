@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('movieActors', [{
+    await queryInterface.bulkInsert('MovieActores', [{
       movieId: 1, 
       actorId: 1, 
       characterName: "Julio Zapata",
@@ -19,6 +19,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('movieActors', null, {});
+    await queryInterface.bulkDelete('MovieActores', null, {});
   }
 };

@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Director.hasMany(models.Movie,{
+      director.hasMany(models.Movie,{
         as:"Movies",
         foreignKey:"directorId"
       })
@@ -52,4 +52,6 @@ module.exports = (sequelize, DataTypes) => {
       plural:'Directores'
     }
   });
+
+  return director;
 };

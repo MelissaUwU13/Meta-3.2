@@ -22,26 +22,24 @@ module.exports = (sequelize, DataTypes) => {
   movieId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true
   },
   actorId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true
   },
   characterName: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
   }
   },{
     sequelize,
-    modelName:'movieActor',
-    tableName:'movieActors',
+    modelName:'MovieActor',
+    tableName:'MovieActores',
     name:{
-      singular:'movieActor',
-      plural:'movieActors'
+      singular:'MovieActor',
+      plural:'MovieActores'
     }
   });
 
+  return movieActor;
 };

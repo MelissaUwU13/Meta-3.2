@@ -10,13 +10,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Movie.belongsToMany(models.Actor,{
+      movie.belongsToMany(models.Actor,{
         as:"Actores",
         through:"MovieActors",
         foreignKey:"movieId"
       })
 
-      Movie.belongsTo(models.Director,{
+      movie.belongsTo(models.Director,{
         as:"Directores",
         foreignKey:"directorId"
       })
@@ -70,4 +70,6 @@ module.exports = (sequelize, DataTypes) => {
       plural:'Movies'
     }
   });
+
+  return movie;
 };

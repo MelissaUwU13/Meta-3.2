@@ -1,61 +1,109 @@
-import { movies } from "../datos/movies.js";
-import { directors } from "../datos/directors.js";
+const { Movie, Director } = require("../models");
+const { Op } = require("sequelize");
 
-// Obtener todas las películas
-export const getAllMovies = (req, res) => {
-  let result = [...movies];
-  const { genre, minRating, minYear, maxYear } = req.query;
+const getAllMovies = async (req, res) => {
+  try {
+    const { genre, minRating, minYear, maxYear } = req.query;
 
-  if (genre) result = result.filter(m => m.genre.includes(genre));
-  if (minRating) result = result.filter(m => m.rating >= parseFloat(minRating));
-  if (minYear) result = result.filter(m => m.releaseYear >= parseInt(minYear));
-  if (maxYear) result = result.filter(m => m.releaseYear <= parseInt(maxYear));
+    const where = {};
 
-  res.json(result);
+    if (genre) {
+      where.genre = { [Op.like]: `%${genre}%` };
+    }
+
+    if (minRating) {
+      where.rating = { [Op.gte]: parseFloat(minRating) };
+    }
+
+    if (minYear || maxYear) {
+      where.releaseYear = {};
+
+      if (minYear) {
+        where.releaseYear[Op.gte] = parseInt(minYear);
+      }
+      if (maxYear) {
+        where.releaseYear[Op.lte] = parseInt(maxYear);
+      }
+    }
+
+    const movies = await Movie.findAll({ where });
+    res.json(movies);
+
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener películas" });
+  }
 };
 
-// Obtener película por ID
-export const getMovieById = (req, res, next) => {
-  const movie = movies.find(m => m.id === req.params.id);
-  if (!movie)
-    return next({ status: 404, message: "Movie not found", code: 404 });
-  res.json(movie);
+const getMovieById = async (req, res, next) => {
+  try {
+    const found = await Movie.findByPk(req.params.id);
+
+    if (!found)
+      return next({ status: 404, message: "Movie not found", code: 404 });
+
+    res.json(found);
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener película" });
+  }
 };
 
-// Crear nueva película
-export const createMovie = (req, res, next) => {
-  const newMovie = req.body;
+const createMovie = async (req, res, next) => {
+  try {
+    const { id, title, releaseYear, directorId } = req.body;
 
-  if (!newMovie.id || !newMovie.title || !newMovie.releaseYear || !newMovie.directorId)
-    return next({ status: 400, message: "Missing required fields", code: 400 });
+    if (!id || !title || !releaseYear || !directorId)
+      return next({ status: 400, message: "Missing required fields", code: 400 });
 
-  if (movies.some(m => m.id === newMovie.id))
-    return next({ status: 409, message: "Movie already exists", code: 409 });
+    const existing = await Movie.findByPk(id);
+    if (existing)
+      return next({ status: 409, message: "Movie already exists", code: 409 });
 
-  const directorExists = directors.some(d => d.id === newMovie.directorId);
-  if (!directorExists)
-    return next({ status: 422, message: "Director does not exist", code: 422 });
+    const directorExists = await Director.findByPk(directorId);
+    if (!directorExists)
+      return next({ status: 422, message: "Director does not exist", code: 422 });
 
-  movies.push(newMovie);
-  res.status(201).json(newMovie);
+    const newMovie = await Movie.create(req.body);
+
+    res.status(201).json(newMovie);
+  } catch (error) {
+    res.status(500).json({ error: "Error al crear película" });
+  }
 };
 
-// Actualizar película
-export const updateMovie = (req, res, next) => {
-  const index = movies.findIndex(m => m.id === req.params.id);
-  if (index === -1)
-    return next({ status: 404, message: "Movie not found", code: 404 });
+const updateMovie = async (req, res, next) => {
+  try {
+    const found = await Movie.findByPk(req.params.id);
 
-  movies[index] = { ...movies[index], ...req.body };
-  res.json(movies[index]);
+    if (!found)
+      return next({ status: 404, message: "Movie not found", code: 404 });
+
+    await found.update(req.body);
+
+    res.json(found);
+  } catch (error) {
+    res.status(500).json({ error: "Error al actualizar película" });
+  }
 };
 
-// Eliminar película
-export const deleteMovie = (req, res, next) => {
-  const index = movies.findIndex(m => m.id === req.params.id);
-  if (index === -1)
-    return next({ status: 404, message: "Movie not found", code: 404 });
+const deleteMovie = async (req, res, next) => {
+  try {
+    const found = await Movie.findByPk(req.params.id);
 
-  movies.splice(index, 1);
-  res.json({ message: "Movie deleted successfully" });
+    if (!found)
+      return next({ status: 404, message: "Movie not found", code: 404 });
+
+    await found.destroy();
+
+    res.json({ message: "Movie deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Error al eliminar película" });
+  }
+};
+
+module.exports = {
+  getAllMovies,
+  getMovieById,
+  createMovie,
+  updateMovie,
+  deleteMovie
 };
